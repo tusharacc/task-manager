@@ -11,16 +11,15 @@ import { TaskStructure } from 'src/task.interface';
 })
 export class AppComponent implements OnInit {
 
-  taskStructure: Array<TaskStructure>;
+  tasksList: Array<TaskStructure>;
   constructor(private taskService: TasksService){}
 
   ngOnInit(){
-    console.log('I am oninit');
     this.taskService.getTasksList()
       .subscribe((data: Array<TaskStructure>) => {
-        this.taskStructure = data;
-        this.taskService.tasksList =  this.taskStructure;
-        console.log(this.taskStructure);
+        this.tasksList = data['data'];
+        this.taskService.tasksList =  this.tasksList;
+        console.log('Fetched tasks',this.tasksList);
       });
   }
 

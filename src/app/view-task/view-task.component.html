@@ -1,3 +1,48 @@
 <app-search-task></app-search-task>
 <br>
-<app-task [task]="val" *ngFor="let val of tasksList"></app-task>
+<div class="container">
+    <div class="row">
+        <div class="col-3">
+            <h6 class="font-weight-bold">TASK</h6>
+        </div>
+        <div class="col-2">
+            <h6 class="font-weight-bold">PARENT TASK</h6>
+        </div>
+        <div class="col-1">
+            <h6 class="font-weight-bold">PRIORITY</h6>
+        </div>
+        <div class="col-2">
+            <h6 class="font-weight-bold">START</h6>
+        </div>
+        <div class="col-2">
+            <h6 class="font-weight-bold">END</h6>
+        </div>
+        <div class="col-1"></div>
+        <div class="col-1"></div>
+    </div>
+    <div class="row" *ngFor="let val of tasksList">
+        <div class="col-3 custom-font-size">
+            {{ val.task }}
+          </div>
+          <div class="col-2 custom-font-size">
+            {{ val.parentTask }}
+          </div>
+          <div class="col-1 custom-font-size">
+            {{ val.priority }}
+          </div>
+          <div class="col-2 custom-font-size">
+            {{ val.startDate | date:"MM/dd/yy" }}
+          </div>
+          <div class="col-2 custom-font-size">
+            {{ val.endDate | date:"MM/dd/yy" }}
+          </div>
+          <div class="col-1">
+            <button (click)="editTask(val)" class="btn btn-info h-75 font-size">Edit</button>
+          </div>
+          <div class="col-1">
+            <button (click)="completeTask(val)" class="btn btn-info h-75 font-size" [disabled]="isDisabled" >Complete</button>
+          </div>
+                  
+    </div>
+</div>
+<!-- <app-task [task]="val" *ngFor="let val of tasksList"></app-task> -->

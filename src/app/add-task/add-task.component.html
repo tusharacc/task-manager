@@ -35,4 +35,30 @@
   <button class="btn btn-primary" type="submit" [disabled]="!f.dirty">{{btnValue}}</button>
 </form>
 
-<br>
+<hr>
+<div *ngIf="show">
+  <table class="table table-sm">
+    <thead>
+      <tr>
+        <th scope="col">Task</th>
+        <th scope="col">Priority</th>
+        <th scope="col">Parent Task</th>
+        <th scope="col">Start Date</th>
+        <th scope="col">End Date</th>
+        <th scope="col">Status</th>
+        <th scope="col">Comment</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let val of addedTask">
+        <td>{{val['task']}}</td>
+        <td>{{val['priority']}}</td>
+        <td>{{val['parentTask']}}</td>
+        <td>{{val['startDate']}}</td>
+        <td>{{val['endDate']}}</td>
+        <td>{{val['status']}}</td>
+        <td>{{val['comment']}}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>

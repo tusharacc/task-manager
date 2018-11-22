@@ -13,6 +13,7 @@ export class AddTaskComponent implements OnInit {
   parentTask: Array<String>;
   postTaskStructure: PostTaskStructure;
   taskFromParam: TaskStructure;
+  addedTask: Array<TaskStructure>;
   updateTask: TaskStructure;
   update: boolean;
   btnValue: String;
@@ -22,8 +23,10 @@ export class AddTaskComponent implements OnInit {
   taskStartDate: Date;
   taskEndDate: Date;
   taskStructure: Array<TaskStructure>;
-
+  show: Boolean;
+  
   constructor(private taskService: TasksService,private dataRoute: ActivatedRoute) {
+    this.show = false;
     this.postTaskStructure = {};
     let update: boolean;
     this.updateTask = {};
@@ -78,10 +81,12 @@ export class AddTaskComponent implements OnInit {
       .subscribe(() => {
         console.log('posted');
         this.callServiceAgain();
+        this.show = true;
+        
       });
     } else {
-      
-      let id = this.taskService.getTaskId(form['value']['taskName']);
+      console.log(form);
+/*       let id = this.taskService.getTaskId(form['value']['taskName']);
       this.updateTask['taskId'] = id;
       this.updateTask['task'] = form['value']['taskName'];
       this.updateTask['parentTask'] = form['value']['parentTaskName'];
@@ -92,7 +97,7 @@ export class AddTaskComponent implements OnInit {
       .subscribe(() => {
         console.log('Posted');
         this.callServiceAgain();
-      });
+      }); */
     }
     
   }
