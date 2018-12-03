@@ -1,21 +1,41 @@
+<div class="alert alert-warning alert-dismissible fade show" role="alert" *ngIf="dateValidationFailed">
+  <strong>{{errorMessage}}</strong>
+  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
 <form (ngSubmit)="onSubmit(f)" #f="ngForm">
   <div class="form-group row">
     <label for="taskName" class="col-sm-2 col-form-label">Task</label>
     <div class="col-sm-10">
-      <input type="input" class="form-control" id="taskName" placeholder="Enter task name" [ngModel]="taskName" name="taskName" required>
+      <input 
+        type="input" 
+        class="form-control" 
+        placeholder="Enter task name" 
+        [ngModel]="taskName" 
+        name="taskName" 
+        (blur)="checkDate(f,'taskName')"
+        required>
     </div>
   </div>
 
   <div class="form-group row">
     <label for="priority" class="col-sm-2 col-form-label">Priority</label>
     <div class="col-sm-10">
-      <input type="range" class="form-control-range" id="priority" min="0" max="30" value="15" [ngModel]="priority" name="priority">
+      <input 
+        type="range" 
+        class="form-control-range" 
+        min="0" 
+        max="30" 
+        value="15" 
+        [ngModel]="priority" 
+        name="priority">
     </div>
   </div>
   <div class="form-group row">
     <label for="parentTaskName" class="col-sm-2 col-form-label">Parent Task</label>
     <div class="col-sm-10">
-      <select class="form-control" id="parentTaskName" [ngModel]="parentTaskName" name="parentTaskName">
+      <select class="form-control" id="parentTaskName" [ngModel]="parentTaskName" name="parentTaskName" required>
         <option value="{{val}}" *ngFor="let val of parentTask">{{val}}</option>
       </select> 
     </div>
@@ -23,16 +43,34 @@
   <div class="form-group row">
     <label for="startDate" class="col-sm-2 col-form-label">Start Date</label>
     <div class="col-sm-10">
-      <input type="date" class="form-control" id="startDate" [ngModel]="taskStartDate | date:'yyyy-MM-dd'" (ngModelChange)="taskStartDate = $event" name="taskStartDate" required>
+      <input 
+        type="date" 
+        class="form-control" 
+        [ngModel]="taskStartDate | date:'yyyy-MM-dd'" 
+        (ngModelChange)="taskStartDate = $event" 
+        [ngClass]="validationStatus"
+        (blur)="checkDate(f,'taskStartDate')"
+        name="taskStartDate" 
+        required>
     </div>
   </div>
   <div class="form-group row">
     <label for="endDate" class="col-sm-2 col-form-label">End Date</label>
     <div class="col-sm-10">
-      <input type="date" class="form-control" id="endDate" [ngModel]="taskEndDate | date:'yyyy-MM-dd'" (ngModelChange)="taskEndDate = $event" name="taskEndDate" required>
+      <input 
+        type="date" 
+        class="form-control" 
+        [ngModel]="taskEndDate | date:'yyyy-MM-dd'" 
+        (ngModelChange)="taskEndDate = $event" 
+        (blur)="checkDate(f,'taskEndDate')"
+        name="taskEndDate" 
+        required>
     </div>
   </div>
-  <button class="btn btn-primary" type="submit" [disabled]="!f.dirty">{{btnValue}}</button>
+  <button 
+    class="btn btn-primary" 
+    type="submit" 
+    [disabled]="!f.valid">{{btnValue}}</button>
 </form>
 
 <hr>

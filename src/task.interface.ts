@@ -1,18 +1,23 @@
 export interface TaskStructure {
-    taskId?: String;
-    task?: String,
-    parentTask?: String,
+    taskId?: string;
+    task?: string,
+    parentTask?: string,
     startDate?: Date,
     endDate?: Date,
-    complete?: Boolean,
-    priority?: Number
+    complete?: boolean,
+    priority?: number
 }
 
 export interface PostTaskStructure {
-    task?: String,
-    parentTask?: String,
+    task?: string,
+    parentTask?: string,
     startDate?: Date,
     endDate?: Date,
-    complete?: Boolean,
-    priority?: Number
+    complete?: boolean,
+    priority?: number
+}
+
+export interface AddedTaskStructure extends PostTaskStructure  {
+    status?: string;
+    comment?: string;
 }

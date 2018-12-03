@@ -15,6 +15,7 @@ export class ViewTaskComponent implements OnInit {
   tasksList: Array<TaskStructure>;
   subscription:Subscription;
   searchType:string;
+  taskStructure: any;
   constructor(private taskService: TasksService,private router: Router) { 
     this.isDisabled = false;
   }
@@ -81,7 +82,13 @@ export class ViewTaskComponent implements OnInit {
       .subscribe((data) => {
         status = data['status']
         if (status === 'Ok'){
-          //this.isDisabled = true;
+          this.taskService.getTasksList()
+            .subscribe((data: Array<TaskStructure>) => {
+            this.taskStructure = data['data'];
+            this.taskService.tasksList =  this.taskStructure;
+            console.log(this.taskStructure);
+            this.tasksList = this.taskService.tasksList;
+          });
         } else {
 
         }

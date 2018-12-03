@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { TasksService } from '../tasks.service';
-import { TaskStructure, PostTaskStructure } from 'src/task.interface';
+import { TaskStructure, PostTaskStructure, AddedTaskStructure } from 'src/task.interface';
 import { ActivatedRoute } from '@angular/router';
 
 @Component({
@@ -13,7 +13,7 @@ export class AddTaskComponent implements OnInit {
   parentTask: Array<String>;
   postTaskStructure: PostTaskStructure;
   taskFromParam: TaskStructure;
-  addedTask: Array<TaskStructure>;
+  addedTask: Array<AddedTaskStructure> = [];
   updateTask: TaskStructure;
   update: boolean;
   btnValue: String;
@@ -23,7 +23,11 @@ export class AddTaskComponent implements OnInit {
   taskStartDate: Date;
   taskEndDate: Date;
   taskStructure: Array<TaskStructure>;
-  show: Boolean;
+  show: boolean;
+  dateValidationFailed: boolean;
+  errorMessage: string = null;
+  validationStatus: string = null;
+  @ViewChild('f') addTaskForm: NgForm;
   
   constructor(private taskService: TasksService,private dataRoute: ActivatedRoute) {
     this.show = false;
@@ -76,14 +80,24 @@ export class AddTaskComponent implements OnInit {
       this.postTaskStructure['startDate'] = form['value']['taskStartDate'];
       this.postTaskStructure['endDate'] = form['value']['taskEndDate'];
       this.postTaskStructure['complete'] = false;
-      this.postTaskStructure['priority'] = form['value']['priority'];
+      if (!Boolean(form['value']['priority'])){
+        this.postTaskStructure['priority'] = 15;
+      } else {
+        this.postTaskStructure['priority'] = form['value']['priority'];
+      }
+      
+      console.log('Piority value',this.postTaskStructure['priority']);
       this.taskService.addTask(this.postTaskStructure)
-      .subscribe(() => {
-        console.log('posted');
+      .subscribe((data) => {
+        console.log('Printing after posting','data');
+        if (data['status'] === 'Ok'){
+          this.addedTask.push({...this.postTaskStructure,'status':'Added','comment':null});
+        }
+        
         this.callServiceAgain();
         this.show = true;
-        
-      });
+        this.addTaskForm.reset();
+        });
     } else {
       console.log(form);
 /*       let id = this.taskService.getTaskId(form['value']['taskName']);
@@ -102,10 +116,46 @@ export class AddTaskComponent implements OnInit {
     
   }
 
+  checkDate(form:NgForm,dateType:String){
+    switch(dateType){
+      case 'taskEndDate':{
+        if (form['value']['taskStartDate'] == null){
+          this.dateValidationFailed = true;
+          this.errorMessage = 'Please enter start date';
+          this.addTaskForm.form.controls['taskEndDate'].setErrors({'incorrect': true});
+        } else if (form['value']['taskStartDate'] > form['value']['taskEndDate']){
+          this.dateValidationFailed = true;
+          this.errorMessage = 'Start Date cannot be past End Date ';
+          this.addTaskForm.form.controls['taskEndDate'].setErrors({'incorrect': true});
+
+        } else {
+          this.dateValidationFailed = false
+          this.errorMessage = null
+        }
+        break;
+      }
+
+      case 'taskStartDate':{
+        if (form['value']['taskStartDate'] > form['value']['taskEndDate']){
+        this.dateValidationFailed = true
+        this.errorMessage = 'Start Date cannot be past End Date ';
+        this.validationStatus = 'Error'
+        this.addTaskForm.form.controls['taskStartDate'].setErrors({'incorrect': true});
+        } else {
+          this.dateValidationFailed = false
+          this.errorMessage = null
+          this.validationStatus = null
+        }
+      
+        break;
+      }
+    }
+  }
+
   callServiceAgain(){
     this.taskService.getTasksList()
       .subscribe((data: Array<TaskStructure>) => {
-      this.taskStructure = data;
+      this.taskStructure = data['data'];
       this.taskService.tasksList =  this.taskStructure;
       console.log(this.taskStructure);
     });

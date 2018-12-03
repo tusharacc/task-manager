@@ -10,9 +10,13 @@ export class TasksService{
     private taskName = new BehaviorSubject<string>('');
     searchType:string;
     tasksList: Array <TaskStructure> ;
-    url: string = 'http://localhost:3000/api/tasks';
-    addTaskUrl: string = 'http://localhost:3000/api/posts';
-    updateTaskUrl: string = 'http://localhost:3000/api/update';
+    url: string = 'http://107.23.229.17:3000/api/tasks';
+    addTaskUrl: string = 'http://107.23.229.17:3000/api/posts';
+    updateTaskUrl: string = 'http://107.23.229.17:3000/api/update';
+
+    //url: string = 'http://localhost:3000/api/tasks';
+    //addTaskUrl: string = 'http://localhost:3000/api/posts';
+    //updateTaskUrl: string = 'http://localhost:3000/api/update';
 
     taskItem$ = this.taskName.asObservable();
     constructor (private http: HttpClient){}

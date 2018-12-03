@@ -1,6 +1,6 @@
 <app-search-task></app-search-task>
 <br>
-<div class="container">
+<div class="container" style="font-size:0.7rem;">
     <div class="row">
         <div class="col-3">
             <h6 class="font-weight-bold">TASK</h6>
@@ -40,7 +40,7 @@
             <button (click)="editTask(val)" class="btn btn-info h-75 font-size">Edit</button>
           </div>
           <div class="col-1">
-            <button (click)="completeTask(val)" class="btn btn-info h-75 font-size" [disabled]="isDisabled" >Complete</button>
+            <button (click)="completeTask(val)" class="btn btn-info h-75 font-size" [disabled]="val['complete']==true" >Complete</button>
           </div>
                   
     </div>
